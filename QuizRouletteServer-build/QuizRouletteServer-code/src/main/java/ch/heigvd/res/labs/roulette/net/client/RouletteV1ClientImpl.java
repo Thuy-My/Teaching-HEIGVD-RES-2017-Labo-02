@@ -6,11 +6,8 @@ import ch.heigvd.res.labs.roulette.net.protocol.RouletteV1Protocol;
 import ch.heigvd.res.labs.roulette.data.Student;
 import ch.heigvd.res.labs.roulette.net.protocol.InfoCommandResponse;
 import ch.heigvd.res.labs.roulette.net.protocol.RandomCommandResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,20 +21,27 @@ import java.util.logging.Logger;
 public class RouletteV1ClientImpl implements IRouletteV1Client {
 
   private static final Logger LOG = Logger.getLogger(RouletteV1ClientImpl.class.getName());
+  private Socket clientSocket;
 
   @Override
   public void connect(String server, int port) throws IOException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    clientSocket = new Socket(server, port);
+
+    InputStream is = clientSocket.getInputStream();
+    OutputStream os = clientSocket.getOutputStream();
+
+    BufferedReader input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+
   }
 
   @Override
   public void disconnect() throws IOException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    clientSocket.close();
   }
 
   @Override
   public boolean isConnected() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return clientSocket.isConnected();
   }
 
   @Override
@@ -62,7 +66,7 @@ public class RouletteV1ClientImpl implements IRouletteV1Client {
 
   @Override
   public String getProtocolVersion() throws IOException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return RouletteV1Protocol.VERSION;
   }
 
 
